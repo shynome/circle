@@ -1,0 +1,14 @@
+{
+  "name": "rotate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "build":"tsc -w"
+  },
+  "keywords": [],
+  "author": "shynome",
+  "license": "MIT"
+}
