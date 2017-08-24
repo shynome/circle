@@ -4,9 +4,16 @@
   "description": "",
   "main": "main.js",
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/jquery": "^3.2.12",
+    "express": "^4.15.4",
+    "jquery": "^1.11.1",
+    "livereload": "^0.6.2",
+    "requirejs": "^2.3.5"
+  },
   "scripts": {
-    "build":"tsc -w"
+    "build": "tsc -w",
+    "dev": "node server"
   },
   "keywords": [],
   "author": "shynome",

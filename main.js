@@ -22,40 +22,49 @@
                     y: Math.cos(radian) * _this.r + _this.offset.y
                 };
             };
-            this.speed = 60 / 3000;
+            this.duration = 700;
             this.sync = function (angle, item) {
                 var _a = _this.getPositionByAngle(angle), x = _a.x, y = _a.y;
                 item.css({ left: x, top: y });
             };
-            this.rotateTo = function (angle, withoutAnimation) {
-                var _a = _this, items = _a.items, speed = _a.speed, sync = _a.sync;
-                angle = angle % 360;
-                items.prop('angle', function (index, angle) { return angle % 360; });
-                var lastAngle = items.prop('angle');
-                var gapAngle = angle - lastAngle;
-                var duration = gapAngle / speed;
-                items.stop(true);
-                var nextState = { angle: "+=" + gapAngle };
-                if (withoutAnimation) {
-                    items.css(nextState);
-                }
-                else {
-                    items.animate(nextState, {
-                        duration: duration,
-                        step: function () { sync(this.angle, this.item); }
-                    });
-                }
+            this.easing = 'linear';
+            this.state = { lastAngle: 0 };
+            this.rotateTo = function (angle, nolimit) {
+                if (nolimit === void 0) { nolimit = false; }
+                var _a = _this, items = _a.items, duration = _a.duration, sync = _a.sync, state = _a.state;
+                angle = nolimit ? angle : angle % 360;
+                var map2dom = function () {
+                    var map2dom = nolimit
+                        ? function () { sync(this.angle, this.item); }
+                        : function () { sync(this.angle, this.item); };
+                    return map2dom;
+                }();
+                return items.stop(true).animate({ angle: "+=" + angle }, {
+                    duration: duration,
+                    easing: _this.easing,
+                    step: map2dom,
+                    complete: map2dom
+                }).promise();
             };
             bar = this.bar = $(bar);
             items = this.items = $(items);
-            this.chunkAngle = 360 / items.length;
+            var w1 = bar.width(), w2 = items.width();
+            this.r = (w1 - w2) / 2;
+            this.offset = { x: w1 / 2, y: w1 / 2 };
+            var chunkAngle = this.chunkAngle = 360 / items.length;
             items.prop({
                 angle: function (index) { return index * _this.chunkAngle; },
                 item: function (index) { return items.eq(index); }
             });
+            //init
             var sync = this.sync;
-            items.each(function () { sync(this.angle, this.item); });
-            debugger;
+            bar.css({ position: 'relative' });
+            items.css({ position: 'absolute', margin: w2 / -2 }).each(function () { sync(this.angle, this.item); });
+            var rotateTo = this.rotateTo;
+            this.items.on('click.circle.toggle', function () {
+                rotateTo(this.angle * -1);
+                bar.trigger('circle.toggle', items.index(this));
+            });
         }
         return Circle;
     }());

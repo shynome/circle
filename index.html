@@ -7,26 +7,25 @@
   <title>六角星旋转支持ie8</title>
   <link rel="stylesheet" href="./style.css">
   <script>
-  var requirejs={ paths:{ jquery:'https://unpkg.com/jquery@1.11.1#' } }
+  var requirejs={ paths:{ jquery:'./node_modules/jquery/dist/jquery.min.js#' } }
   </script>
-  <script src="https://unpkg.com/requirejs/require.js"></script>
+  <script src="./node_modules/requirejs/require.js"></script>
 </head>
 <body>
   <div class="bar table">
     <div class="middle">
       <div class="center"></div>
     </div>
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
+    <div class="item">1</div>
+    <div class="item">2</div>
+    <div class="item">3</div>
+    <div class="item">4</div>
+    <div class="item">5</div>
+    <div class="item">6</div>
   </div>
   <script>
   require(['./main'],function(exports){
-    var Circle = exports.Circle
-    new Circle('.bar','.bar .item')
+    window.c = new (exports.Circle)($('.bar'),$('.bar .item'))
   })
   </script>
 </body>
